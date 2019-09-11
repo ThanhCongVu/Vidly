@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using System.Data.Entity;
 using Vidly.Models;
 
 namespace Vidly.Controllers
@@ -20,7 +21,10 @@ namespace Vidly.Controllers
         }
         public ViewResult Index()
         {
-            var customers = _context.Customers.ToList();
+            // To be able to load Membership discount rate in the view, 
+            //we need to eager loading the MembershipType in here using Include() method
+            // Note: using system.Data.Entity
+            var customers = _context.Customers.Include(c => c.MembershipType).ToList();
 
             return View(customers);
         }
