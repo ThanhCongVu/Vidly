@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using Vidly.Models;
 using Vidly.ViewModel;
+using Vidly.ViewModels;
 
 namespace Vidly.Controllers
 {
@@ -55,13 +56,13 @@ namespace Vidly.Controllers
         public ActionResult Edit(int Id)
         {
             // retrieve the selected movie
-            var movie = _context.Movies.Single(m => m.Id == Id);
+            var movie = _context.Movies.SingleOrDefault(m => m.Id == Id);
 
             if (movie == null)
                 return HttpNotFound();
-            var viewModel = new MovieFormViewModel
+            var viewModel = new MovieFormViewModel(movie)
             {
-                Movie = movie,
+                
                 Genres = _context.Genres.ToList()
             };
 
@@ -70,8 +71,18 @@ namespace Vidly.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Save(Movie movie)
         {
+            if (!ModelState.IsValid)
+            {
+                var viewModel = new MovieFormViewModel(movie)
+                {
+                    Genres = _context.Genres.ToList()
+                };
+
+                return View("MovieForm", viewModel);
+            }
             //check if the this is an existing movie or a new movie
             //if this is a new movie then add it to the database
             if (movie.Id == 0)
