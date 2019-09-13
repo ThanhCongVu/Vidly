@@ -22,7 +22,7 @@ namespace Vidly.Controllers
         }
         public ViewResult Index()
         {
-            return View();
+            return View();// we kinda disable this CustomersController in order to use API/CustomersController
         }
 
         public ActionResult Details(int id)
