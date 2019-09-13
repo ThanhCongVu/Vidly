@@ -13,5 +13,9 @@ namespace Vidly.Models
         public short SignUpFee { get; set; }
         public byte DurationInMonths { get; set; }
         public byte DiscountRate { get; set; }
+
+        // these 2 values represent in the dropdown list of the Membershiptype
+        public static readonly byte Unknown = 0; // when user has not selected a membershiptype
+        public static readonly byte PayAsYouGo = 1; // when payasyougo is selected
     }
 }

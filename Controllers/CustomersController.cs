@@ -45,14 +45,16 @@ namespace Vidly.Controllers
         public ActionResult New()
         {
             var membershipTypes = _context.MembershipTypes.ToList();
+
             var viewModel = new CustomerFormViewModel
             {
+                Customer = new Customer(),
                 MembershipTypes = membershipTypes
             };
             return View("CustomerForm",viewModel);
         }
 
-        [HttpPost]
+        
         public ActionResult Create(Customer customer)
         {
             _context.Customers.Add(customer);
@@ -77,8 +79,20 @@ namespace Vidly.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Save(Customer customer)
         {
+            //Validate the model to check if it meets all the requirements
+            if (!ModelState.IsValid)
+            {
+                var viewModel = new CustomerFormViewModel
+                {
+                    Customer = customer,
+                    MembershipTypes = _context.MembershipTypes.ToList()
+                };
+
+                return View("CustomerForm", viewModel);
+            }
             //if customer.Id==0 means this is not an existing customer,
             //so we add this customer to our list 
             if (customer.Id == 0)
