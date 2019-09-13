@@ -22,12 +22,7 @@ namespace Vidly.Controllers
         }
         public ViewResult Index()
         {
-            // To be able to load Membership discount rate in the view, 
-            //we need to eager loading the MembershipType in here using Include() method
-            // Note: using system.Data.Entity
-            var customers = _context.Customers.Include(c => c.MembershipType).ToList();
-
-            return View(customers);
+            return View();
         }
 
         public ActionResult Details(int id)
